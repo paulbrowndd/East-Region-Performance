@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>East Region Hub & Spoke Dashboard</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="top">
+        <h1>East Region Hub & Spoke Dashboard</h1>
+        <div class="controls">
+          <label>
+            View
+            <select id="viewMode">
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+            </select>
+          </label>
+          <label id="dailyWrap">
+            Daily date
+            <select id="dailySelect"></select>
+          </label>
+          <label id="weeklyWrap">
+            Week
+            <select id="weeklySelect"></select>
+          </label>
+        </div>
+      </header>
+
+      <section class="kpis" id="kpis"></section>
+
+      <section class="grid">
+        <article>
+          <h2>Top Spoke Issue Volume</h2>
+          <div id="topIssues"></div>
+        </article>
+        <article>
+          <h2>Barcode Status Totals</h2>
+          <div class="table-wrap">
+            <table id="barcodeTable"></table>
+          </div>
+        </article>
+      </section>
+
+      <section>
+        <h2>Spoke Performance Detail</h2>
+        <div class="table-wrap">
+          <table id="spokeTable"></table>
+        </div>
+      </section>
+
+      <section>
+        <h2>Hub Performance Detail</h2>
+        <div class="table-wrap">
+          <table id="hubTable"></table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
