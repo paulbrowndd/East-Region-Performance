@@ -1,6 +1,6 @@
 # East Region Hub & Spoke Dashboard
 
-Shareable browser dashboard for East region spoke and hub performance, based on 4/20-4/23 source data.
+Shareable browser dashboard for East region spoke and hub performance. Daily snapshots currently include **4/20 through 4/24** (update `data.js` with `update_data.py` when you add more days).
 
 ## Run locally
 
@@ -12,7 +12,7 @@ Open `index.html` in a browser.
 2. Run:
 
 ```bash
-python3 update_data.py --xlsx "/Users/paul.brown/Downloads/4_24.xlsx" --date "4/24"
+python3 update_data.py --xlsx "/Users/paul.brown/Downloads/4_25.xlsx" --date "4/25"
 ```
 
 This command will:
@@ -22,16 +22,29 @@ This command will:
 Optional: limit weekly rollup dates (Mon-Sun only):
 
 ```bash
-python3 update_data.py --xlsx "/Users/paul.brown/Downloads/4_24.xlsx" --date "4/24" --week-dates "4/21,4/22,4/23,4/24,4/25,4/26,4/27"
+python3 update_data.py --xlsx "/Users/paul.brown/Downloads/4_25.xlsx" --date "4/25" --week-dates "4/21,4/22,4/23,4/24,4/25,4/26,4/27"
 ```
 
 After it updates `data.js`, publish:
 
 ```bash
 git add data.js
-git commit -m "Add 4/24 dashboard data"
+git commit -m "Add 4/25 dashboard data"
 git push
 ```
+
+## Re-upload to GitHub (replace site files)
+
+If you update the site by uploading files in the GitHub web UI, upload everything at the **root** of the repo (same folder as `index.html`):
+
+- `index.html`
+- `styles.css`
+- `app.js`
+- `data.js` (this is what changes when you add a new day)
+- `README.md` (optional but recommended)
+- `update_data.py` (optional; handy for your next Excel import)
+
+You do **not** need to upload the hidden `.git` folder when using the website upload flow.
 
 ## Publish on GitHub Pages
 
