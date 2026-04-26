@@ -61,6 +61,13 @@ function issueTotal(spoke) {
   return STATUS_KEYS.reduce((acc, k) => acc + (spoke[k] || 0), 0);
 }
 
+/** Raw Excel export uses "1.otd"; show a cleaner label in the UI. */
+function formatBarcodeStatusLabel(status) {
+  if (typeof status !== "string") return status;
+  if (status.trim().toLowerCase() === "1.otd") return "otd";
+  return status;
+}
+
 function getCurrentPeriod() {
   const mode = els.viewMode.value;
   if (mode === "daily") {
@@ -101,7 +108,10 @@ function renderBarcodeTable(period) {
   const total = rows.reduce((a, b) => a + b.count, 0);
   const head = `<tr><th>Barcode Status</th><th>Count</th><th>Share</th></tr>`;
   const body = rows
-    .map((r) => `<tr><td>${r.status}</td><td>${r.count}</td><td>${total ? fmtPct((r.count / total) * 100) : "0.0%"}</td></tr>`)
+    .map(
+      (r) =>
+        `<tr><td>${formatBarcodeStatusLabel(r.status)}</td><td>${r.count}</td><td>${total ? fmtPct((r.count / total) * 100) : "0.0%"}</td></tr>`
+    )
     .join("");
   els.barcodeTable.innerHTML = head + body;
 }
