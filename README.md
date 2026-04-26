@@ -1,6 +1,6 @@
 # East Region Hub & Spoke Dashboard
 
-Shareable browser dashboard for East region spoke and hub performance. Daily snapshots currently include **4/20 through 4/24** (update `data.js` with `update_data.py` when you add more days).
+Shareable browser dashboard for East region spoke and hub performance. Daily snapshots currently include **4/20 through 4/25** (update `data.js` with `update_data.py` when you add more days).
 
 ## Run locally
 
