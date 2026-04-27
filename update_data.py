@@ -47,6 +47,21 @@ def parse_date_key(value: str) -> Tuple[int, int]:
     return int(match.group(1)), int(match.group(2))
 
 
+def safe_float(value) -> float:
+    """Excel exports sometimes use string 'null' or blanks for empty numeric cells."""
+    if value is None:
+        return 0.0
+    if isinstance(value, (int, float)):
+        return float(value)
+    s = str(value).strip().lower()
+    if s in ("", "null", "none", "n/a", "-", "na"):
+        return 0.0
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return 0.0
+
+
 def load_data_js(path: Path) -> Dict:
     raw = path.read_text(encoding="utf-8").strip()
     prefix = "window.DASHBOARD_DATA="
@@ -114,8 +129,8 @@ def parse_daily_xlsx(xlsx_path: Path, date_key: str) -> Dict:
 
         site_key = str(site).strip()
         status_key = str(status).strip().lower()
-        by_site[site_key][status_key] += float(mx_count or 0)
-        otd_by_site[site_key] = round(float(otd or 0) * 100, 1)
+        by_site[site_key][status_key] += safe_float(mx_count)
+        otd_by_site[site_key] = round(safe_float(otd) * 100, 1)
 
     spokes: List[Dict] = []
     for site in sorted(by_site.keys()):
@@ -146,9 +161,9 @@ def parse_daily_xlsx(xlsx_path: Path, date_key: str) -> Dict:
         if current_hub and isinstance(col2, str):
             metric = col2.strip().lower()
             if metric == "num missorts":
-                hubs_by_code[current_hub]["missorts"] = int(round(float(col3 or 0)))
+                hubs_by_code[current_hub]["missorts"] = int(round(safe_float(col3)))
             elif metric == "missort rate":
-                hubs_by_code[current_hub]["missortRate"] = round(float(col3 or 0) * 100, 3)
+                hubs_by_code[current_hub]["missortRate"] = round(safe_float(col3) * 100, 3)
 
     cpt_sheet = workbook["Hub On Time CPT"]
     for row in cpt_sheet.iter_rows(min_row=3, values_only=True):
@@ -159,7 +174,7 @@ def parse_daily_xlsx(xlsx_path: Path, date_key: str) -> Dict:
         if key.lower().startswith("grand total"):
             continue
         hubs_by_code.setdefault(key, {})
-        hubs_by_code[key]["onTimeCpt"] = round(float(value or 0) * 100, 1)
+        hubs_by_code[key]["onTimeCpt"] = round(safe_float(value) * 100, 1)
 
     hubs = [
         {
