@@ -68,6 +68,21 @@ function formatBarcodeStatusLabel(status) {
   return status;
 }
 
+/** First letter of each word uppercase (rest lowercase) for barcode breakdown display. */
+function capitalizeWord(word) {
+  const i = word.search(/[a-zA-Z]/);
+  if (i === -1) return word;
+  return word.slice(0, i) + word.charAt(i).toUpperCase() + word.slice(i + 1).toLowerCase();
+}
+
+function formatBarcodeStatusForDisplay(status) {
+  let s = formatBarcodeStatusLabel(status);
+  if (typeof s !== "string") return s;
+  const t = s.trim();
+  if (t.toLowerCase() === "otd") return "OTD";
+  return t.split(/\s+/).map(capitalizeWord).join(" ");
+}
+
 function getCurrentPeriod() {
   const mode = els.viewMode.value;
   if (mode === "daily") {
@@ -110,7 +125,7 @@ function renderBarcodeTable(period) {
   const body = rows
     .map(
       (r) =>
-        `<tr><td>${formatBarcodeStatusLabel(r.status)}</td><td>${r.count}</td><td>${total ? fmtPct((r.count / total) * 100) : "0.0%"}</td></tr>`
+        `<tr><td>${formatBarcodeStatusForDisplay(r.status)}</td><td>${r.count}</td><td>${total ? fmtPct((r.count / total) * 100) : "0.0%"}</td></tr>`
     )
     .join("");
   els.barcodeTable.innerHTML = head + body;
