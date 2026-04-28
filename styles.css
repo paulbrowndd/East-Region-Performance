@@ -303,3 +303,12 @@ tbody tr:last-child td { border-bottom: none; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+.footer {
+  padding: 20px 28px 28px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+}
