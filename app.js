@@ -98,7 +98,6 @@ function renderKPIs(period) {
     ["Active Spokes", spokes.length],
     ["Avg Spoke OTD", fmtPct(avg(spokes, "otd"))],
     ["Total Returns", sum(spokes, "returns")],
-    ["Total Delivered", sum(spokes, "otdBy8pm")],
     ["Avg Hub CPT", fmtPct(avg(hubs, "onTimeCpt"))],
   ]
     .map(([l, v]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`)
