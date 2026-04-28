@@ -5,6 +5,7 @@ const els = {
   dailyWrap: document.getElementById("dailyWrap"),
   weeklyWrap: document.getElementById("weeklyWrap"),
   kpis: document.getElementById("kpis"),
+  summary: document.getElementById("summary"),
   topIssues: document.getElementById("topIssues"),
   barcodeTable: document.getElementById("barcodeTable"),
   spokeTable: document.getElementById("spokeTable"),
@@ -157,6 +158,7 @@ function render() {
   els.weeklyWrap.style.display = els.viewMode.value === "weekly" ? "flex" : "none";
   const period = getCurrentPeriod();
   renderKPIs(period);
+  renderSummary(period);
   renderTopIssues(period);
   renderBarcodeTable(period);
   renderSpokeTable(period);
@@ -177,3 +179,112 @@ function init() {
 }
 
 init();
+
+// ── Summary ──────────────────────────────────────────────────────────────────
+
+const OTD_RED        = 80;
+const OTD_YELLOW     = 92;
+const CPT_RED        = 80;
+const CPT_YELLOW     = 92;
+const MISSORT_RED    = 2.0;
+const MISSORT_YELLOW = 1.0;
+
+function badge(color, text) {
+  return `<span class="badge badge-${color}">${text}</span>`;
+}
+
+function spokeBadge(otd) {
+  if (otd < OTD_RED)    return badge("red",    "Critical");
+  if (otd < OTD_YELLOW) return badge("yellow", "At Risk");
+  return badge("green", "On Track");
+}
+
+function hubCptBadge(cpt) {
+  if (cpt < CPT_RED)    return badge("red",    "Critical");
+  if (cpt < CPT_YELLOW) return badge("yellow", "At Risk");
+  return badge("green", "On Track");
+}
+
+function hubMissortBadge(rate) {
+  if (rate >= MISSORT_RED)    return badge("red",    "High");
+  if (rate >= MISSORT_YELLOW) return badge("yellow", "Elevated");
+  return badge("green", "Normal");
+}
+
+function topNArr(arr, key, n, descending) {
+  return [...arr].sort((a, b) => descending ? b[key] - a[key] : a[key] - b[key]).slice(0, n);
+}
+
+function renderSummary(period) {
+  if (!els.summary) return;
+  const spokes   = period.spokes || [];
+  const hubs     = period.hubs   || [];
+  const isWeekly = els.viewMode.value === "weekly";
+  const bullets  = [];
+
+  // Worst OTD spokes
+  const worstSpokes = topNArr(spokes, "otd", 3, false);
+  if (worstSpokes.length) {
+    bullets.push(`<li class="summary-group-header">🔴 Bottom Spokes by OTD</li>`);
+    worstSpokes.forEach(s => {
+      bullets.push(`<li>${spokeBadge(s.otd)} <strong>${s.code}</strong> — OTD ${fmtPct(s.otd)}</li>`);
+    });
+  }
+
+  // Top issue categories
+  const issueTotals = STATUS_KEYS.map(k => ({
+    key: k, label: STATUS_LABELS[k],
+    total: spokes.reduce((acc, s) => acc + (s[k] || 0), 0),
+  })).filter(i => i.total > 0).sort((a, b) => b.total - a.total).slice(0, 5);
+
+  if (issueTotals.length) {
+    bullets.push(`<li class="summary-group-header">📦 Top Issue Categories${isWeekly ? " (Week Total)" : ""}</li>`);
+    issueTotals.forEach((i, idx) => {
+      const color = idx === 0 ? "red" : idx === 1 ? "yellow" : "neutral";
+      bullets.push(`<li>${badge(color, "#" + (idx + 1))} <strong>${i.label}</strong> — ${i.total.toLocaleString()} parcels</li>`);
+    });
+  }
+
+  // Hub CPT callouts
+  const badCptHubs = hubs.filter(h => h.onTimeCpt < OTD_YELLOW).sort((a, b) => a.onTimeCpt - b.onTimeCpt);
+  bullets.push(`<li class="summary-group-header">🏭 Hub On-Time CPT</li>`);
+  if (badCptHubs.length) {
+    badCptHubs.forEach(h => {
+      bullets.push(`<li>${hubCptBadge(h.onTimeCpt)} <strong>${h.code}</strong> — CPT ${fmtPct(h.onTimeCpt)}</li>`);
+    });
+  } else {
+    bullets.push(`<li>${badge("green", "All Clear")} All hubs above ${OTD_YELLOW}% on-time CPT</li>`);
+  }
+
+  // Hub missort callouts
+  const badMissortHubs = hubs.filter(h => h.missortRate >= MISSORT_YELLOW).sort((a, b) => b.missortRate - a.missortRate);
+  bullets.push(`<li class="summary-group-header">⚠️ Hub Missort Rates</li>`);
+  if (badMissortHubs.length) {
+    badMissortHubs.forEach(h => {
+      bullets.push(`<li>${hubMissortBadge(h.missortRate)} <strong>${h.code}</strong> — ${fmtPct(h.missortRate)} missort rate (${h.missorts} missorts)</li>`);
+    });
+  } else {
+    bullets.push(`<li>${badge("green", "All Clear")} All hubs below ${MISSORT_YELLOW}% missort rate</li>`);
+  }
+
+  // Overall health
+  const avgOtd       = avg(spokes, "otd");
+  const criticalCount = spokes.filter(s => s.otd < OTD_RED).length;
+  const atRiskCount   = spokes.filter(s => s.otd >= OTD_RED && s.otd < OTD_YELLOW).length;
+  const onTrackCount  = spokes.length - criticalCount - atRiskCount;
+  const overallColor  = criticalCount > 0 ? "red" : atRiskCount > 2 ? "yellow" : "green";
+  const overallLabel  = criticalCount > 0 ? "Needs Attention" : atRiskCount > 2 ? "Mixed" : "Healthy";
+
+  els.summary.innerHTML = `
+    <div class="summary-header">
+      <span class="summary-title">${isWeekly ? "Weekly" : "Daily"} Performance Summary</span>
+      <span class="summary-chips">
+        ${badge(overallColor, overallLabel)}
+        <span class="summary-stat">Avg OTD ${fmtPct(avgOtd)}</span>
+        <span class="summary-stat">${badge("red","Critical")} ${criticalCount}</span>
+        <span class="summary-stat">${badge("yellow","At Risk")} ${atRiskCount}</span>
+        <span class="summary-stat">${badge("green","On Track")} ${onTrackCount}</span>
+      </span>
+    </div>
+    <ul class="summary-list">${bullets.join("")}</ul>`;
+}
