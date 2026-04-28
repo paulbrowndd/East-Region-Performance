@@ -118,3 +118,16 @@ th:first-child, td:first-child { text-align: left; }
   height: 100%;
   background: #22c55e;
 }
+
+/* ── Header branding ─────────────────────────────────────────────────────── */
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dd-logo {
+  height: 28px;
+  width: auto;
+  filter: brightness(0) invert(1);
+}
