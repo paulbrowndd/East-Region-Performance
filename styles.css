@@ -8,9 +8,9 @@
   --bg-row:     #0e1622;
   --border:     #1a2840;
   --border-hi:  #2a3f5f;
-  --accent:     #e84e2a;
-  --accent-dim: rgba(232,78,42,0.12);
-  --accent2:    #f5a623;
+  --accent:     #2dd4a0;
+  --accent-dim: rgba(45,212,160,0.12);
+  --accent2:    #22c55e;
   --text-1:     #f0f4f8;
   --text-2:     #8ba0b8;
   --text-3:     #4a6080;
@@ -87,7 +87,7 @@ h1 {
   text-transform: uppercase;
   color: var(--accent);
   background: var(--accent-dim);
-  border: 1px solid rgba(232,78,42,0.25);
+  border: 1px solid rgba(45,212,160,0.25);
   border-radius: 3px;
   padding: 2px 7px;
   margin-left: 2px;
