@@ -113,7 +113,19 @@ function renderTopIssues(period) {
     .map((s) => {
       const val = issueTotal(s);
       const w = Math.max(2, (val / max) * 100);
-      return `<div class="bar-row"><div class="bar-label"><span>${s.code}</span><span>${val}</span></div><div class="bar"><span style="width:${w}%"></span></div></div>`;
+      const breakdown = STATUS_KEYS
+        .filter((k) => s[k] > 0)
+        .sort((a, b) => s[b] - s[a])
+        .map((k) => `<div class="tt-row"><span>${STATUS_LABELS[k]}</span><span>${s[k]}</span></div>`)
+        .join("");
+      const tooltip = `<div class="bar-tooltip"><div class="tt-title">${s.code} — ${val} issues</div>${breakdown}</div>`;
+      return `<div class="bar-row">
+        <div class="bar-label"><span>${s.code}</span><span>${val}</span></div>
+        <div class="bar bar-hover">
+          <span style="width:${w}%"></span>
+          ${tooltip}
+        </div>
+      </div>`;
     })
     .join("");
 }
