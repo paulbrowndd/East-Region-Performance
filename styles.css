@@ -3,18 +3,18 @@
 
 /* ── Variables ────────────────────────────────────────────────────────────── */
 :root {
-  --bg:         #080c12;
-  --bg-panel:   #0c1220;
-  --bg-card:    #101826;
-  --bg-row:     #0e1622;
+  --bg:         #050810;
+  --bg-panel:   #0a1428;
+  --bg-card:    #0d1a30;
+  --bg-row:     #0b1525;
   --border:     #1a2840;
   --border-hi:  #2a3f5f;
   --accent:     #2dd4a0;
   --accent-dim: rgba(45,212,160,0.12);
   --accent2:    #22c55e;
   --text-1:     #ffffff;
-  --text-2:     #c8d8ea;
-  --text-3:     #7a9ab8;
+  --text-2:     #e2edf7;
+  --text-3:     #9db8d0;
   --green:      #2dd4a0;
   --green-dim:  rgba(45,212,160,0.1);
   --yellow:     #f5a623;
