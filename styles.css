@@ -228,7 +228,8 @@ h2 {
 
 table {
   border-collapse: collapse;
-  width: 100%;
+  width: max-content;
+  min-width: 100%;
   font-size: 12px;
 }
 
@@ -254,7 +255,13 @@ th {
   letter-spacing: 0.08em;
   color: var(--text-3);
 }
-th:first-child { text-align: left; }
+th:first-child {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  z-index: 15;
+  background: var(--bg-card);
+}
 
 td {
   border-bottom: 1px solid var(--border);
@@ -275,12 +282,6 @@ td:first-child {
   background: var(--bg-panel);
 }
 
-th:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 15;
-  background: var(--bg-card);
-}
 
 tbody tr { transition: background 0.1s; }
 tbody tr:hover { background: rgba(255,255,255,0.03); }
