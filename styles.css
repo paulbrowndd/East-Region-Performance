@@ -271,7 +271,6 @@ tbody tr:hover { background: rgba(255,255,255,0.03); }
 tbody tr:last-child td { border-bottom: none; }
 
 /* ── Bar Chart ────────────────────────────────────────────────────────────── */
-.bar-row { margin-bottom: 8px; }
 .bar-row:last-child { margin-bottom: 0; }
 
 .bar-label {
@@ -288,7 +287,7 @@ tbody tr:last-child td { border-bottom: none; }
   height: 6px;
   background: var(--border);
   border-radius: 999px;
-  overflow: hidden;
+  overflow: visible;
 }
 .bar > span {
   display: block;
@@ -301,6 +300,7 @@ tbody tr:last-child td { border-bottom: none; }
 /* ── Bar Tooltip ──────────────────────────────────────────────────────────── */
 .bar-row {
   position: relative;
+  margin-bottom: 8px;
 }
 
 .bar-row:hover .bar-tooltip {
