@@ -33,7 +33,7 @@ body {
   font-family: var(--font-body);
   background: var(--bg);
   color: var(--text-1);
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -107,7 +107,7 @@ label {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -172,7 +172,7 @@ main > *:not(.top) {
 }
 
 .kpi .l {
-  font-size: 10px;
+  font-size: 11px;
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -230,7 +230,7 @@ table {
   border-collapse: collapse;
   width: max-content;
   min-width: 100%;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 thead tr {
@@ -249,7 +249,7 @@ th {
   text-align: right;
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -269,7 +269,7 @@ td {
   text-align: right;
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-2);
 }
 td:first-child {
@@ -291,7 +291,7 @@ tbody tr:last-child td { border-bottom: none; }
 .bar-row:last-child { margin-bottom: 0; }
 
 .bar-label {
-  font-size: 11px;
+  font-size: 13px;
   font-family: var(--font-mono);
   display: flex;
   justify-content: space-between;
@@ -371,7 +371,7 @@ tbody tr:last-child td { border-bottom: none; }
   justify-content: space-between;
   gap: 16px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 13px;
   color: var(--text-2);
   padding: 2px 0;
 }
