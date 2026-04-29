@@ -157,6 +157,7 @@ main > *:not(.top) {
   top: 0; left: 0; right: 0;
   height: 2px;
   background: linear-gradient(90deg, var(--accent), transparent);
+  animation: bar-pulse 2.4s ease-in-out infinite;
 }
 .kpi:hover { border-color: var(--border-hi); }
 
