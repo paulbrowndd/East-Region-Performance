@@ -150,6 +150,7 @@ main > *:not(.top) {
   position: relative;
   overflow: hidden;
   transition: border-color 0.2s;
+  text-align: center;
 }
 .kpi::before {
   content: '';
