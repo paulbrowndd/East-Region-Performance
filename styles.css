@@ -312,3 +312,56 @@ tbody tr:last-child td { border-bottom: none; }
   color: var(--text-3);
   letter-spacing: 0.06em;
 }
+
+/* ── Bar Tooltip ──────────────────────────────────────────────────────────── */
+.bar-hover {
+  position: relative;
+}
+
+.bar-hover:hover .bar-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.bar-tooltip {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 50;
+  background: #0e1e33;
+  border: 1px solid var(--border-hi);
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-width: 200px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.tt-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-2);
+  padding: 2px 0;
+}
+
+.tt-row span:last-child {
+  color: var(--text-1);
+  font-weight: 600;
+}
