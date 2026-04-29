@@ -121,10 +121,8 @@ function renderTopIssues(period) {
       const tooltip = `<div class="bar-tooltip"><div class="tt-title">${s.code} — ${val} issues</div>${breakdown}</div>`;
       return `<div class="bar-row">
         <div class="bar-label"><span>${s.code}</span><span>${val}</span></div>
-        <div class="bar bar-hover">
-          <span style="width:${w}%"></span>
-          ${tooltip}
-        </div>
+        <div class="bar"><span style="width:${w}%"></span></div>
+        ${tooltip}
       </div>`;
     })
     .join("");
