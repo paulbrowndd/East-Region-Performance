@@ -269,6 +269,17 @@ td:first-child {
   text-align: left;
   color: var(--text-1);
   font-weight: 600;
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: var(--bg-panel);
+}
+
+th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 15;
+  background: var(--bg-card);
 }
 
 tbody tr { transition: background 0.1s; }
