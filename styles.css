@@ -192,7 +192,7 @@ article, section:not(.kpis):not(.grid) {
   border-radius: 6px;
   padding: 0;
   margin-top: 14px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .section-head {
@@ -298,27 +298,12 @@ tbody tr:last-child td { border-bottom: none; }
   transition: width 0.4s ease;
 }
 
-/* ── Scrollbar ────────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
-
-/* ── Footer ───────────────────────────────────────────────────────────────── */
-.footer {
-  padding: 20px 28px 28px;
-  font-size: 10px;
-  font-family: var(--font-mono);
-  color: var(--text-3);
-  letter-spacing: 0.06em;
-}
-
 /* ── Bar Tooltip ──────────────────────────────────────────────────────────── */
-.bar-hover {
+.bar-row {
   position: relative;
 }
 
-.bar-hover:hover .bar-tooltip {
+.bar-row:hover .bar-tooltip {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
@@ -330,15 +315,15 @@ tbody tr:last-child td { border-bottom: none; }
   transform: translateY(4px);
   transition: opacity 0.15s ease, transform 0.15s ease;
   position: absolute;
-  bottom: calc(100% + 8px);
+  bottom: calc(100% + 6px);
   left: 0;
-  z-index: 50;
+  z-index: 200;
   background: #0e1e33;
   border: 1px solid var(--border-hi);
   border-radius: 6px;
   padding: 10px 12px;
-  min-width: 200px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  min-width: 210px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
 }
 
 .tt-title {
@@ -365,3 +350,20 @@ tbody tr:last-child td { border-bottom: none; }
   color: var(--text-1);
   font-weight: 600;
 }
+
+/* ── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ── Footer ───────────────────────────────────────────────────────────────── */
+.footer {
+  padding: 20px 28px 28px;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+}
+
+
