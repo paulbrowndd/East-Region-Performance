@@ -186,7 +186,47 @@ def parse_daily_xlsx(xlsx_path: Path, date_key: str) -> Dict:
         for code, values in sorted(hubs_by_code.items())
     ]
 
-    return {"label": f"Daily {date_key}", "spokes": spokes, "hubs": hubs, "barcode": barcode}
+    # Parse Lanes That Missed CPT sheet if present
+    cpt_lanes = []
+    if "Lanes That Missed CPT" in workbook.sheetnames:
+        from datetime import timedelta
+
+        def fmt_time_est(dt) -> str:
+            if not hasattr(dt, 'hour'):
+                return "N/A"
+            est = dt - timedelta(hours=4)
+            hour = est.hour % 12 or 12
+            ampm = "AM" if est.hour < 12 else "PM"
+            return f"{hour}:{est.minute:02d} {ampm}"
+
+        def fmt_delta(actual, scheduled) -> str:
+            if not hasattr(actual, 'hour') or not hasattr(scheduled, 'hour'):
+                return ""
+            diff = int((actual - scheduled).total_seconds() / 60)
+            if diff > 0:
+                return f"+{diff}m late"
+            elif diff < 0:
+                return f"{abs(diff)}m early"
+            return "On time"
+
+        lanes_sheet = workbook["Lanes That Missed CPT"]
+        for row in lanes_sheet.iter_rows(min_row=2, values_only=True):
+            if not row or not row[0]:
+                continue
+            hub, lane, shipment_id, pro, sched_pickup, actual_pickup, cpt_time, departure = row[:8]
+            cpt_lanes.append({
+                "hub": str(hub).strip(),
+                "lane": str(lane).strip() if lane else "",
+                "shipmentId": str(shipment_id).strip() if shipment_id else "",
+                "scheduledPickup": fmt_time_est(sched_pickup),
+                "actualPickup": fmt_time_est(actual_pickup),
+                "pickupStatus": fmt_delta(actual_pickup, sched_pickup),
+                "cpt": fmt_time_est(cpt_time),
+                "departure": fmt_time_est(departure),
+                "departureStatus": fmt_delta(departure, cpt_time),
+            })
+
+    return {"label": f"Daily {date_key}", "spokes": spokes, "hubs": hubs, "barcode": barcode, "cptLanes": cpt_lanes}
 
 
 def build_weekly_snapshot(daily_periods: List[Dict], week_label: str) -> Dict:
