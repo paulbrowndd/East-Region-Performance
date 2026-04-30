@@ -170,6 +170,7 @@ function render() {
   renderBarcodeTable(period);
   renderSpokeTable(period);
   renderHubTable(period);
+  renderCptLanes(period);
 }
 
 function init() {
@@ -186,3 +187,40 @@ function init() {
 }
 
 init();
+
+function renderCptLanes(period) {
+  const el = document.getElementById("cptLanesTable");
+  if (!el) return;
+  const lanes = period.cptLanes || [];
+
+  if (!lanes.length) {
+    el.closest("section").style.display = "none";
+    return;
+  }
+  el.closest("section").style.display = "";
+
+  const head = `<tr>
+    <th>Hub</th><th>Lane</th>
+    <th>Sched Pickup</th><th>Actual Pickup</th><th>Pickup Status</th>
+    <th>CPT</th><th>Departure</th><th>Departure Status</th>
+  </tr>`;
+
+  const body = lanes.map(l => {
+    const depColor = l.departureStatus.includes("late") ? "var(--red)" :
+                     l.departureStatus.includes("early") ? "var(--green)" : "var(--yellow)";
+    const pickColor = l.pickupStatus.includes("late") ? "var(--red)" :
+                      l.pickupStatus === "On time" ? "var(--green)" : "var(--text-2)";
+    return `<tr>
+      <td>${l.hub}</td>
+      <td>${l.lane}</td>
+      <td>${l.scheduledPickup}</td>
+      <td>${l.actualPickup}</td>
+      <td style="color:${pickColor};font-weight:600">${l.pickupStatus}</td>
+      <td>${l.cpt}</td>
+      <td>${l.departure}</td>
+      <td style="color:${depColor};font-weight:600">${l.departureStatus}</td>
+    </tr>`;
+  }).join("");
+
+  el.innerHTML = head + body;
+}
