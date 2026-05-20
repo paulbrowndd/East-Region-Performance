@@ -92,10 +92,12 @@ function getCurrentPeriod() {
 
 function renderKPIs(period) {
   const spokes = period.spokes;
+  const hubs = period.hubs;
   const html = [
     ["Active Spokes", spokes.length],
     ["Avg Spoke OTD", fmtPct(avg(spokes, "otd"))],
     ["Total Returns", sum(spokes, "returns")],
+    ["Avg Hub CPT", fmtPct(avg(hubs, "onTimeCpt"))],
   ]
     .map(([l, v]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`)
     .join("");
