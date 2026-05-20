@@ -8,7 +8,6 @@ const els = {
   topIssues: document.getElementById("topIssues"),
   barcodeTable: document.getElementById("barcodeTable"),
   spokeTable: document.getElementById("spokeTable"),
-  hubTable: document.getElementById("hubTable"),
 };
 
 const STATUS_KEYS = [
@@ -93,12 +92,10 @@ function getCurrentPeriod() {
 
 function renderKPIs(period) {
   const spokes = period.spokes;
-  const hubs = period.hubs;
   const html = [
     ["Active Spokes", spokes.length],
     ["Avg Spoke OTD", fmtPct(avg(spokes, "otd"))],
     ["Total Returns", sum(spokes, "returns")],
-    ["Avg Hub CPT", fmtPct(avg(hubs, "onTimeCpt"))],
   ]
     .map(([l, v]) => `<div class="kpi"><div class="v">${v}</div><div class="l">${l}</div></div>`)
     .join("");
@@ -153,14 +150,6 @@ function renderSpokeTable(period) {
   els.spokeTable.innerHTML = head + body;
 }
 
-function renderHubTable(period) {
-  const head = `<tr><th>Hub</th><th>On-Time CPT</th><th>Missorts</th><th>Missort Rate</th></tr>`;
-  const body = (period.hubs || [])
-    .map((h) => `<tr><td>${h.code}</td><td>${fmtPct(h.onTimeCpt || 0)}</td><td>${h.missorts || 0}</td><td>${fmtPct(h.missortRate || 0)}</td></tr>`)
-    .join("");
-  els.hubTable.innerHTML = head + body;
-}
-
 function render() {
   els.dailyWrap.style.display = els.viewMode.value === "daily" ? "flex" : "none";
   els.weeklyWrap.style.display = els.viewMode.value === "weekly" ? "flex" : "none";
@@ -169,7 +158,6 @@ function render() {
   renderTopIssues(period);
   renderBarcodeTable(period);
   renderSpokeTable(period);
-  renderHubTable(period);
   renderCptLanes(period);
 }
 
