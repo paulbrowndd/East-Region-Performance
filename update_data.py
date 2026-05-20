@@ -148,22 +148,23 @@ def parse_daily_xlsx(xlsx_path: Path, date_key: str) -> Dict:
 
     hubs_by_code: Dict[str, Dict] = {}
     current_hub = None
-    missort_sheet = workbook["Hub Missorts"]
-    for row in missort_sheet.iter_rows(min_row=2, values_only=True):
-        col1, col2, col3 = row
-        if isinstance(col1, str) and col1.strip():
-            name = col1.strip()
-            if name.lower().startswith("grand total"):
-                current_hub = None
-                continue
-            current_hub = name
-            hubs_by_code.setdefault(current_hub, {})
-        if current_hub and isinstance(col2, str):
-            metric = col2.strip().lower()
-            if metric == "num missorts":
-                hubs_by_code[current_hub]["missorts"] = int(round(safe_float(col3)))
-            elif metric == "missort rate":
-                hubs_by_code[current_hub]["missortRate"] = round(safe_float(col3) * 100, 3)
+    if "Hub Missorts" in workbook.sheetnames:
+        missort_sheet = workbook["Hub Missorts"]
+        for row in missort_sheet.iter_rows(min_row=2, values_only=True):
+            col1, col2, col3 = row
+            if isinstance(col1, str) and col1.strip():
+                name = col1.strip()
+                if name.lower().startswith("grand total"):
+                    current_hub = None
+                    continue
+                current_hub = name
+                hubs_by_code.setdefault(current_hub, {})
+            if current_hub and isinstance(col2, str):
+                metric = col2.strip().lower()
+                if metric == "num missorts":
+                    hubs_by_code[current_hub]["missorts"] = int(round(safe_float(col3)))
+                elif metric == "missort rate":
+                    hubs_by_code[current_hub]["missortRate"] = round(safe_float(col3) * 100, 3)
 
     cpt_sheet = workbook["Hub On Time CPT"]
     for row in cpt_sheet.iter_rows(min_row=3, values_only=True):
